@@ -49,7 +49,7 @@ function myFunction(){
 
         var retriveclass =localStorage.getItem('Class');
         retriveclass = retriveclass?retriveclass.split(','):[];
-        retriveclass.push(stdname);
+        retriveclass.push(stdclass);
         localStorage.setItem('Class',retriveclass.toString());
 
     }
