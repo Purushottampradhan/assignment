@@ -1,4 +1,4 @@
-//stayle for Documnet
+//style for Document
 function style() {
   var mystyle = document.createElement("style");
   document.head.appendChild(mystyle);
@@ -17,96 +17,110 @@ function style() {
   mystyle.sheet.insertRule(".btn1{background-color:red;}");
   mystyle.sheet.insertRule(".btn2{background-color:yellow}");
 }
-style();
+style(); //style function call
 
-var div0 = document.createElement("div");
-document.body.appendChild(div0);
-div0.id = "main";
+var main_div = document.createElement("div");
+document.body.appendChild(main_div);
+main_div.id = "main";
+var input_div = document.createElement("div");
+input_div.className = "input-container";
+var submitCanclebtn_div = document.createElement("div");
+submitCanclebtn_div.className = "element";
 
-var div1 = document.createElement("div");
-div1.className = "input-container";
+//function for input student name
+function inputName() {
+  var input_name_div = document.createElement("div");
+  input_name_div.className = "element";
+  let input_name_label = document.createElement("label");
+  input_name_label.setAttribute("for", "inputname");
+  input_name_label.textContent = "Name:";
+  let inputname = document.createElement("input");
+  inputname.id = "inputname";
+  input_name_div.appendChild(input_name_label);
+  input_name_div.appendChild(inputname);
+  input_div.appendChild(input_name_div);
+  return inputname.id;
+}
+var inputnameid = inputName(); //calling the input name and store the id of input name
+//function for input student class
+function inputClass() {
+  var input_class_div = document.createElement("div");
+  input_class_div.className = "element";
+  let input_class_label = document.createElement("label");
+  input_class_label.setAttribute("for", "inputclass");
+  input_class_label.textContent = "Class:";
+  let inputclass = document.createElement("input");
+  inputclass.id = "inputclass";
+  input_class_div.appendChild(input_class_label);
+  input_class_div.appendChild(inputclass);
+  input_div.appendChild(input_class_div);
+  return inputclass.id;
+}
+var inputclassid = inputClass(); //calling the input name and store the id of input class
+//create submit button function
+function submit() {
+  var submitbtn = document.createElement("input");
+  submitbtn.type = "submit";
+  submitbtn.id = "subbtn";
+  submitCanclebtn_div.appendChild(submitbtn);
+  return submitbtn;
+}
+var submitbtn = submit(); //call the submit button and store the value of vartiable submitbtn
+//create cancle button function
+function cancle() {
+  let canclebtn = document.createElement("input");
+  canclebtn.id = "canbtn";
+  canclebtn.type = "reset";
+  canclebtn.value = "Cancle";
+  submitCanclebtn_div.appendChild(canclebtn);
+  input_div.appendChild(submitCanclebtn_div);
+  return canclebtn;
+}
+var canclebtn = cancle(); //call the cancle button and store the value of variable submitbtn
 
-//creating input box for Name
-var div2 = document.createElement("div");
-div2.className = "element";
-let label1 = document.createElement("label");
-label1.setAttribute("for", "inputname");
-label1.textContent = "Name:";
-let inputname = document.createElement("input");
-inputname.id = "inputname";
-div2.appendChild(label1);
-div2.appendChild(inputname);
-div1.appendChild(div2);
-
-//Creating input box for class
-var div3 = document.createElement("div");
-div3.className = "element";
-let label2 = document.createElement("label");
-label2.setAttribute("for", "inputclass");
-label2.textContent = "Class:";
-let inputclass = document.createElement("input");
-inputclass.id = "inputclass";
-div3.appendChild(label2);
-div3.appendChild(inputclass);
-div1.appendChild(div3);
-
-//create submit button
-var div4 = document.createElement("div");
-div4.className = "element";
-let submitbtn = document.createElement("input");
-submitbtn.type = "submit";
-submitbtn.id = "subbtn";
-div4.appendChild(submitbtn);
-
-//create cancle button
-let canclebtn = document.createElement("input");
-canclebtn.id = "canbtn";
-canclebtn.type = "reset";
-canclebtn.value = "Cancle";
-div4.appendChild(canclebtn);
-div1.appendChild(div4);
-var div5 = document.createElement("div");
-div5.className = "output-container";
-
-var div6 = document.createElement("div");
-div5.appendChild(div6);
-
+var output_div = document.createElement("div");
+output_div.className = "output-container";
+var table_div = document.createElement("div");
+output_div.appendChild(table_div);
 var mytable = document.createElement("table");
-div6.appendChild(mytable);
+table_div.appendChild(mytable);
 mytable.id = "record";
-tbhead = document.createElement("thead");
-mytable.appendChild(tbhead);
 
-th1 = document.createElement("th");
-th1.textContent = "Student Name";
-th2 = document.createElement("th");
-th2.textContent = "Class";
-th3 = document.createElement("th");
-th3.textContent = "Edit";
-th4 = document.createElement("th");
-th4.textContent = "Delete";
+function tablehead() {
+  tbhead = document.createElement("thead");
+  mytable.appendChild(tbhead);
 
-tbhead.appendChild(th1);
-tbhead.appendChild(th2);
-tbhead.appendChild(th3);
-tbhead.appendChild(th4);
+  student_name = document.createElement("th");
+  student_name.textContent = "Student Name";
+  student_class = document.createElement("th");
+  student_class.textContent = "Class";
+  edit_btn = document.createElement("th");
+  edit_btn.textContent = "Edit";
+  delete_btn = document.createElement("th");
+  delete_btn.textContent = "Delete";
+
+  tbhead.appendChild(student_name);
+  tbhead.appendChild(student_class);
+  tbhead.appendChild(edit_btn);
+  tbhead.appendChild(delete_btn);
+}
+//function for creating table heading
+tablehead();
 
 var tablebody = document.createElement("tbody");
 mytable.appendChild(tablebody);
+main_div.appendChild(input_div);
+main_div.appendChild(output_div);
 
-div0.appendChild(div1);
-div0.appendChild(div5);
 
-canclebtn.addEventListener("click", clear);
-
-function clear() {}
 
 submitbtn.addEventListener("click", addrecord);
 get();
 //function for add record in local storage
 function addrecord() {
-  stdname = document.getElementById("inputname").value;
-  stdclass = document.getElementById("inputclass").value;
+  stdname = document.getElementById(inputnameid).value;
+  stdclass = document.getElementById(inputclassid).value;
+  console.log(stdname);
   if (stdname == "" || stdclass == "") {
     alert("Please enter name and class");
   } else if (localStorage.getItem("record") == null) {
