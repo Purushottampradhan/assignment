@@ -112,8 +112,6 @@ mytable.appendChild(tablebody);
 main_div.appendChild(input_div);
 main_div.appendChild(output_div);
 
-
-
 submitbtn.addEventListener("click", addrecord);
 get();
 //function for add record in local storage
@@ -156,12 +154,7 @@ function get() {
     edit = document.createElement("button");
     edit.id = `editbtn${index}`;
     edit.setAttribute("onclick", `javascript:editit(${index});`);
-    editit = function (index) {
-      inputname.value = myrecord[index][0];
-      inputclass.value = myrecord[index][1];
-      myrecord.splice(index, 1);
-      localStorage.setItem("record", JSON.stringify(myrecord));
-    };
+
     edit.className = "btn2";
     edit.textContent = "Edit";
     td3.appendChild(edit);
@@ -182,4 +175,17 @@ function get() {
       localStorage.setItem("record", JSON.stringify(myrecord));
     };
   });
+}
+//function for edit option
+editit = function (index) {
+  inputname.value = myrecord[index][0];
+  inputclass.value = myrecord[index][1];
+  myrecord.splice(index, 1);
+  localStorage.setItem("record", JSON.stringify(myrecord));
+};
+canclebtn.addEventListener("click", refreshit);
+//function for cancle button
+function refreshit() {
+  document.getElementById(inputnameid).value = " ";
+  document.getElementById(inputclassid).value = " ";
 }
