@@ -19,7 +19,6 @@ function style() {
 }
 style();
 
-
 var div0 = document.createElement("div");
 document.body.appendChild(div0);
 div0.id = "main";
@@ -97,8 +96,6 @@ mytable.appendChild(tablebody);
 
 div0.appendChild(div1);
 div0.appendChild(div5);
-
-
 
 canclebtn.addEventListener("click", clear);
 
