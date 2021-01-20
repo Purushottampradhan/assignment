@@ -93,10 +93,11 @@ mytable.appendChild(tablebody);
 main_div.appendChild(input_div);
 main_div.appendChild(output_div);
 
+tr = [];
 submitbtn.addEventListener("click", addrecord);
 get();
 
-//function for add record in local storage
+//function for add record
 function addrecord() {
   stdname = document.getElementById("inputname").value;
   stdclass = document.getElementById("inputclass").value;
@@ -106,77 +107,100 @@ function addrecord() {
   };
   if (stdname == "" || stdclass == "") {
     alert("Please enter name and class");
-  } else if (localStorage.getItem("record") == null) {
-    myrecord = [];
-    myrecord.push(obj);
-    localStorage.setItem("record", JSON.stringify(myrecord));
-    // get();
   } else {
-    myrecord = JSON.parse(localStorage.getItem("record"));
-    myrecord.push(obj);
-    localStorage.setItem("record", JSON.stringify(myrecord));
-    // get();
-  }
-  location.reload();
-}
-//function for display Data in to the screen
-function get() {
-  var tr = [];
-  myrecord = JSON.parse(localStorage.getItem("record"));
-  console.log(myrecord[0].name);
-  console.log(myrecord[0].class);
-  myrecord.forEach((element, index) => {
-    tr[index] = document.createElement("tr");
-    tr[index].className = "mytable";
-    tablebody.appendChild(tr[index]);
-    td1 = document.createElement("td");
-    td1.textContent = myrecord[index].name;
-    td2 = document.createElement("td");
-    td2.textContent = myrecord[index].class;
-    tr[index].appendChild(td1);
-    tr[index].appendChild(td2);
-
-    td3 = document.createElement("td");
-    tr[index].appendChild(td3);
-    edit = document.createElement("button");
-    edit.id = `editbtn${index}`;
-    edit.setAttribute("onclick", `javascript:editit(${index});`); //call edit function
-
-    edit.className = "btn2";
-    edit.textContent = "Edit";
-    td3.appendChild(edit);
-
-    td4 = document.createElement("td");
-    tr[index].appendChild(td4);
-    del = document.createElement("button");
-    del.className = "btn1";
-    del.id = `delbtn${index}`;
-    del.setAttribute("onclick", `javascript:deleteit(${index});`); //call delete function
-    del.textContent = "Delete";
-    td4.appendChild(del);
-    deleteit = function (index) {
-      myrecord = JSON.parse(localStorage.getItem("record"));
-      tablebody.removeChild(tr[index]);
-      // myrecordstr=localStorage.getItem('record')
-      myrecord.splice(index, 1);
-      localStorage.setItem("record", JSON.stringify(myrecord));
-      location.reload();
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        get();
+        location.reload();
+      }
     };
-  });
+    xhttp.open(
+      "POST",
+      "https://us-central1-services-example-39773.cloudfunctions.net/app/api/students",
+      true
+    );
+    // xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // xhttp.send("name=" + stdname + "&" + "class=" + stdclass);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify(obj));
+  }
+}
+
+//function for display record
+function showData(index, obj) {
+  tr[index] = document.createElement("tr");
+  tr[index].className = "mytable";
+  tablebody.appendChild(tr[index]);
+  td1 = document.createElement("td");
+  td1.textContent = obj[index].name;
+  td2 = document.createElement("td");
+  td2.textContent = obj[index].class;
+  tr[index].appendChild(td1);
+  tr[index].appendChild(td2);
+  td3 = document.createElement("td");
+  tr[index].appendChild(td3);
+  edit = document.createElement("button");
+  edit.id = `editbtn${index}`;
+  edit.setAttribute("onclick", `javascript:editit(${index});`); //call edit function
+  edit.className = "btn2";
+  edit.textContent = "Edit";
+  td3.appendChild(edit);
+  td4 = document.createElement("td");
+  tr[index].appendChild(td4);
+  del = document.createElement("button");
+  del.className = "btn1";
+  del.id = `delbtn${index}`;
+  del.setAttribute("onclick", `javascript:deleteit(${obj[index].id});`); //call delete function
+  del.textContent = "Delete";
+  td4.appendChild(del);
+}
+
+//function for GET API method 
+function get() {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      obj = JSON.parse(this.responseText);
+      obj.forEach((element, index) => {
+        showData(index, obj);
+      });
+    }
+  };
+  xmlhttp.open(
+    "GET",
+    "https://us-central1-services-example-39773.cloudfunctions.net/app/api/students",
+    true
+  );
+  xmlhttp.send();
 }
 
 //function for edit option
 editit = function (index) {
-  inputname.value = myrecord[index].name;
-  inputclass.value = myrecord[index].class;
-  myrecord.splice(index, 1);
-  localStorage.setItem("record", JSON.stringify(myrecord));
-  
+  this.index = index;
+  inputname.value = obj[index].name;
+  inputclass.value = obj[index].class;
 };
 
-canclebtn.addEventListener("click", refreshit);
 //function for cancle button
+canclebtn.addEventListener("click", refreshit);
 function refreshit() {
   document.getElementById("inputname").value = " ";
   document.getElementById("inputclass").value = " ";
 }
+//function for DELETE API method
+deleteit = function (index) {
+  console.log(index)
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      location.reload()
+    }
+  };
+  xmlhttp.open(
+    "DELETE",
+    "https://us-central1-services-example-39773.cloudfunctions.net/app/api/students/"+index,
+    true
+  );
+  xmlhttp.send();
+};
